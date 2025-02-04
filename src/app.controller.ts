@@ -15,27 +15,5 @@ export class AppController {
     private authService: AuthService
   ) { }
 
-  @Get()
-  getHello(): string {
-    console.log('check port', this.configService.get<string>("PORT"))
-    return this.appService.getHello();
-  }
 
-
-  @Post('/login')
-  @UseGuards(LocalAuthGuard)
-  @Public()
-  handleLogin(@Request() req) {
-    return this.authService.login(req.user);
-  }
-
-  // @UseGuards(JwtAuthGuard)
-  // @Public()
-  @Get('profile')
-  getProfile(@Request() req) {
-    let expire = this.configService.get<string>('JWT_ACCESS_EXPIRE')
-    console.log('expire', expire)
-    console.log(ms(expire as StringValue))
-    return req.user;
-  }
 }
