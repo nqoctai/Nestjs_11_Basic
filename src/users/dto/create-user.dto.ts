@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 class Company {
 
-    @IsNotEmpty({ message: 'Id không được để trống' })
+    @IsNotEmpty({ message: 'aId không được để trống' })
     _id: mongoose.Schema.Types.ObjectId;
 
     @IsNotEmpty({ message: 'Name không được để trống' })
@@ -64,4 +64,6 @@ export class RegisterUserDto {
 
     @IsNotEmpty({ message: 'Adress không được để trống' })
     address: string;
+
+    role: string;
 }

@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import ms, { StringValue } from 'ms';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { Response } from 'express';
 
 
 @Controller("auth")
@@ -17,8 +19,9 @@ export class AuthController {
     @Post('/login')
     @UseGuards(LocalAuthGuard)
     @Public()
-    handleLogin(@Request() req) {
-        return this.authService.login(req.user);
+    @ResponseMessage("User login")
+    handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
+        return this.authService.login(req.user, response);
     }
 
     // @UseGuards(JwtAuthGuard)
@@ -29,5 +32,13 @@ export class AuthController {
         console.log('expire', expire)
         console.log(ms(expire as StringValue))
         return req.user;
+    }
+
+
+    @Post('/register')
+    @ResponseMessage("Register a new User")
+    @Public()
+    handleRegister(@Body() registerUser: RegisterUserDto) {
+        return this.authService.register(registerUser);
     }
 }

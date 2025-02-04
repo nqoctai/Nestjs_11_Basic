@@ -25,13 +25,8 @@ export class CompaniesService {
   }
 
   async findAll(currentPage: number, limit: number, qs: string) {
-    console.log("check qs>>>", qs);
+
     const { filter, sort, population } = aqp(qs);
-
-
-    console.log("check aqp>>>", aqp(qs));
-
-
     delete filter.page;
     delete filter.limit;
 
