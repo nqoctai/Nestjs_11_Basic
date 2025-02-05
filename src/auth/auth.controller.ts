@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, Req, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import ms, { StringValue } from 'ms';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Response } from 'express';
+import { IUser } from 'src/users/users.interface';
+import { Request } from 'express';
 
 
 @Controller("auth")
@@ -27,7 +29,7 @@ export class AuthController {
     // @UseGuards(JwtAuthGuard)
     // @Public()
     @Get('profile')
-    getProfile(@Request() req) {
+    getProfile(@Req() req) {
         let expire = this.configService.get<string>('JWT_ACCESS_EXPIRE')
         console.log('expire', expire)
         console.log(ms(expire as StringValue))
@@ -40,5 +42,20 @@ export class AuthController {
     @Public()
     handleRegister(@Body() registerUser: RegisterUserDto) {
         return this.authService.register(registerUser);
+    }
+
+    @Get('/account')
+    @ResponseMessage("Get user information")
+    handleGetAccount(@User() user: IUser) {
+        return { user };
+    }
+
+
+    @Get('/refresh')
+    @Public()
+    @ResponseMessage("Get User by refresh token")
+    handleRefreshToken(@Req() req: Request, @Res({ passthrough: true }) response: Response) {
+        const refreshToken = req.cookies['refresh_token'];
+        return this.authService.processNewToken(refreshToken, response);
     }
 }
