@@ -12,7 +12,7 @@ export class FilesController {
   @Post('upload')
   @Public()
   @ResponseMessage("Upload file")
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('fileUpload'))
   uploadFile(@UploadedFile(new ParseFilePipeBuilder()
     .addFileTypeValidator({
       fileType: /^(jpg|jpeg|image\/jpeg|png|image\/png|gif|txt|pdf|application\/pdf|doc|docx|text\/plain)$/i,

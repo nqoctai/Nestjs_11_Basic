@@ -15,7 +15,8 @@ export class Job {
     @Prop({ type: Object })
     company: {
         _id: mongoose.Schema.Types.ObjectId,
-        name: string
+        name: string,
+        logo: string
     };
 
     @Prop()
@@ -38,6 +39,9 @@ export class Job {
 
     @Prop()
     isActive: boolean;
+
+    @Prop()
+    location: string;
 
 
 
