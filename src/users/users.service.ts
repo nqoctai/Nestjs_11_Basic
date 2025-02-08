@@ -94,7 +94,7 @@ export class UsersService {
     return this.userModel.findOne({
       email: username
     })
-      .populate({ path: 'role', select: { _id: 1, name: 1 } });
+      .populate({ path: 'role', select: { name: 1 } });
   }
 
   isValidPasswrod(password: string, hash: string) {
@@ -145,6 +145,7 @@ export class UsersService {
   }
 
   findUserByToken = async (refreshToken: string) => {
-    return await this.userModel.findOne({ refreshToken });
+    return await this.userModel.findOne({ refreshToken })
+      .populate({ path: 'role', select: { name: 1 } });
   }
 }
