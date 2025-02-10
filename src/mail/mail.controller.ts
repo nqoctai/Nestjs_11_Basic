@@ -25,22 +25,8 @@ export class MailController {
   @Get()
   @Public()
   @ResponseMessage("Test email")
+  @Cron("* 0 0 * * 0") // 0.0am every sunday
   async handleTestEmail() {
-    let jobs = [
-      {
-        name: "Job 1",
-        company: "Company 1",
-        salary: "1000",
-        skills: ["NodeJS", "ReactJS", "MongoDB"]
-      },
-      {
-        name: "Job 2",
-        company: "Company 2",
-        salary: "2000",
-        skills: ["NodeJS", "ReactJS", "Java"]
-      }
-    ]
-
 
     const subscribers = await this.subscriberModel.find({});
     for (const subs of subscribers) {

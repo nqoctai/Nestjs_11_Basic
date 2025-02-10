@@ -7,6 +7,7 @@ import { TransformInterceptor } from 'src/core/transform.interceptor';
 import cookieParser from 'cookie-parser';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
@@ -46,6 +47,27 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: ['1', '2']
   });
+
+  // config swagger
+  const config = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'Bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'token',
+    )
+    .addSecurityRequirements('token')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
+
+
   await app.listen(configService.get<string>('PORT') ?? 8000);
 }
 bootstrap();

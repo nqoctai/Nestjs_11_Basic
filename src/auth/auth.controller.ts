@@ -4,11 +4,12 @@ import ms, { StringValue } from 'ms';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
-import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto, UserLoginDto } from 'src/users/dto/create-user.dto';
 import { Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { Request } from 'express';
 import { RolesService } from 'src/roles/roles.service';
+import { ApiBody } from '@nestjs/swagger';
 
 
 @Controller("auth")
@@ -23,6 +24,7 @@ export class AuthController {
     @Post('/login')
     @UseGuards(LocalAuthGuard)
     @Public()
+    @ApiBody({ type: UserLoginDto, })
     @ResponseMessage("User login")
     handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
         return this.authService.login(req.user, response);
