@@ -14,7 +14,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // config validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true
+  }));
 
   // config global guards and interceptors
   const reflector = app.get(Reflector);
